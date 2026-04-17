@@ -1,0 +1,24 @@
+# TODO: Remove all mentions of example
+menu "Example Configuration"
+
+    config WIFI_SSID
+        string "WiFi SSID"
+        default "myssid"
+        help
+            SSID (network name) for the example to connect to.
+
+    config WIFI_PASSWORD
+        string "WiFi Password"
+        default "mypassword"
+        help
+            WiFi password (WPA or WPA2) for the example to use.
+
+    config GPIO_INPUT_PIN
+        int "GPIO input pin"
+        # TODO: Proper range validation
+        range 0 48
+        default 4
+        help
+            GPIO pin number to be used to read from button
+
+endmenu
