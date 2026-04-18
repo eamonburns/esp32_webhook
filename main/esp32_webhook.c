@@ -10,7 +10,6 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "freertos/task.h"
-#include "esp_system.h"
 
 #include "driver/gpio.h"
 
@@ -32,16 +31,6 @@ static void invoke_webhook() {
     printf("Invoking webhook /s\n");
 }
 
-// static void gpio_task(void *arg) {
-//     uint32_t io_num;
-//     for (;;) {
-//         if (xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)) {
-//             printf("GPIO[%"PRIu32"] intr, val: %d\n", io_num, gpio_get_level(io_num));
-//             invoke_webhook();
-//         }
-//     }
-// }
-
 void app_main(void)
 {
     // Configure GPIO input
@@ -54,7 +43,6 @@ void app_main(void)
     gpio_config(&io_conf);
 
     gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
-    // xTaskCreate(gpio_task, "gpio_task", 2048, NULL, 10, NULL);
 
     gpio_install_isr_service(ESP_INTR_FLAG_DEFAULT);
     gpio_isr_handler_add(GPIO_INPUT_PIN, gpio_isr_handler, (void*)GPIO_INPUT_PIN);
@@ -70,28 +58,7 @@ void app_main(void)
             if (curr_level != prev_level) {
                 prev_level = curr_level;
                 if (curr_level == PRESS_LEVEL) invoke_webhook();
-            } else {
-                printf("Duplicate interupt level: %d\n", curr_level);
             }
-            // printf("Count: %d\n", count);
-            // printf("GPIO[%"PRIu32"] intr, val: %d\n", io_num, gpio_get_level(io_num));
-            // invoke_webhook();
         }
     }
-    // for (int count = 0; true; count++) {
-    //     printf("Count: %d\n", count);
-    //     vTaskDelay(1000 / portTICK_PERIOD_MS);
-    // }
-
-    // printf("Hello world!\n");
-    //
-    // printf("SSID: %s, Password: %s\n", WIFI_SSID, WIFI_PASSWORD);
-    //
-    // for (int i = 10; i >= 0; i--) {
-    //     printf("Restarting in %d seconds...\n", i);
-    //     vTaskDelay(1000 / portTICK_PERIOD_MS);
-    // }
-    // printf("Restarting now.\n");
-    // fflush(stdout);
-    // esp_restart();
 }
