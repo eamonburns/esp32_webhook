@@ -20,5 +20,31 @@ menu "Example Configuration"
         default 4
         help
             GPIO pin number to be used to read from button
+            WARNING: There is no validation of the port range. Different boards may have a different number of pins
+
+    config WEBHOOK_SERVER
+        string "Webhook server"
+        default "example.com"
+        help
+            IP or hostname of the server accepting the HTTP webhooks
+
+    config WEBHOOK_PORT
+        string "Webhook port"
+        default "8080"
+        help
+            Port that the "webhook server" is listening on
+
+    config WEBHOOK_ID
+        string "Webhook ID"
+        default "supersecret"
+        help
+            The (secret) webhook ID. Webhooks will be sent to the path "/webhook/WEBHOOK_ID"
+
+    config WEBHOOK_BUTTON_ID
+        int "Webhook button ID"
+        range 1 9
+        default 1
+        help
+            The button ID to send in the webhook request data
 
 endmenu

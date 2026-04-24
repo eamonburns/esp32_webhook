@@ -31,15 +31,15 @@
 
 #include "driver/gpio.h"
 
-// TODO: Make configurable
-#define WEBHOOK_SERVER "example.com"
-#define WEBHOOK_PORT "8080"
-// TODO: Make configurable
-#define WEBHOOK_ID "bla"
+#define WEBHOOK_SERVER CONFIG_WEBHOOK_SERVER
+#define WEBHOOK_PORT CONFIG_WEBHOOK_PORT
+#define WEBHOOK_ID CONFIG_WEBHOOK_ID
 #define WEBHOOK_PATH "/webhook/" WEBHOOK_ID
-// NOTE: Must be a single digit
-// TODO: Make configurable
-#define WEBHOOK_BUTTON_ID "1"
+// HACK: Needed to convert the CONFIG_WEBHOOK_BUTTON_ID to a string literal.
+// It is not a string in the menuconfig because it needs to be range validated (1-9).
+#define _STR_HELPER(x) #x
+#define _STR(x) _STR_HELPER(x)
+#define WEBHOOK_BUTTON_ID _STR(CONFIG_WEBHOOK_BUTTON_ID)
 
 static const char *WEBHOOK_REQUEST = "POST "WEBHOOK_PATH" HTTP/1.0\r\n"
     "Host: "WEBHOOK_SERVER":"WEBHOOK_PORT"\r\n"
